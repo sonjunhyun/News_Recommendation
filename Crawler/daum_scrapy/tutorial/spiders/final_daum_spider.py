@@ -3,6 +3,7 @@ from datetime import date, timedelta
 from user_agent import generate_user_agent
 import requests
 import json
+import pandas as pd
 
 
 headers = {'User-Agent': generate_user_agent(os='win', device_type='desktop')}
@@ -16,7 +17,7 @@ class DaumFinanceSpider(scrapy.Spider):
         super(DaumFinanceSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/finance?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -98,7 +99,7 @@ class DaumIndustrySpider(scrapy.Spider):
         super(DaumIndustrySpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/industry?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -180,7 +181,7 @@ class DaumOthersSpider(scrapy.Spider):
         super(DaumOthersSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/others?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -262,7 +263,7 @@ class DaumEmploySpider(scrapy.Spider):
         super(DaumEmploySpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/employ?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -344,7 +345,7 @@ class DaumAutosSpider(scrapy.Spider):
         super(DaumAutosSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/autos?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -426,7 +427,7 @@ class DaumStockSpider(scrapy.Spider):
         super(DaumStockSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -508,7 +509,7 @@ class DaumMarketSpider(scrapy.Spider):
         super(DaumMarketSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/market?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -590,7 +591,7 @@ class DaumPublicnoticeSpider(scrapy.Spider):
         super(DaumPublicnoticeSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/publicnotice?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -671,15 +672,15 @@ class DaumStockworldSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumStockworldSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/world?page={}&regDate={}'
-        self.current_date = date(2023, 8, 13)
-        self.end_date = date.today()
+        self.start_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
 
     def start_requests(self):
         #크롤링 시작 url 생성
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=url, callback=self.parse, headers=headers)
         
@@ -687,11 +688,11 @@ class DaumStockworldSpider(scrapy.Spider):
         current_page_content = ''.join(response.css('.box_etc > ul > li > div > strong > a::text').getall())
         # 현재 페이지의 내용과 이전 페이지의 내용이 같으면, 해당 일자 크롤링 종료
         if current_page_content == self.previous_page_content:
-            self.current_date += timedelta(days=1)
+            self.start_date -= timedelta(days=1)
             # 다음 날짜가 종료 날짜 이전일 경우 다시 parse 함수 실행
-            if self.current_date <= self.end_date:
+            if self.start_date >= self.end_date:
                 self.current_page = 1
-                date_str = self.current_date.strftime('%Y%m%d')
+                date_str = self.start_date.strftime('%Y%m%d')
                 url = self.base_url.format(self.current_page, date_str)
                 yield scrapy.Request(url=url, callback=self.parse, headers=headers)
             return
@@ -711,7 +712,7 @@ class DaumStockworldSpider(scrapy.Spider):
 
         # 다음 페이지로 넘어감
         self.current_page += 1
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         next_url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=next_url, callback=self.parse, headers=headers)
 
@@ -753,15 +754,15 @@ class DaumBondsfuturesSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumBondsfuturesSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/bondsfutures?page={}&regDate={}'
-        self.current_date = date(2023, 8, 13)
-        self.end_date = date.today()
+        self.start_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
 
     def start_requests(self):
         #크롤링 시작 url 생성
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=url, callback=self.parse, headers=headers)
         
@@ -769,11 +770,11 @@ class DaumBondsfuturesSpider(scrapy.Spider):
         current_page_content = ''.join(response.css('.box_etc > ul > li > div > strong > a::text').getall())
         # 현재 페이지의 내용과 이전 페이지의 내용이 같으면, 해당 일자 크롤링 종료
         if current_page_content == self.previous_page_content:
-            self.current_date += timedelta(days=1)
+            self.start_date -= timedelta(days=1)
             # 다음 날짜가 종료 날짜 이전일 경우 다시 parse 함수 실행
-            if self.current_date <= self.end_date:
+            if self.start_date >= self.end_date:
                 self.current_page = 1
-                date_str = self.current_date.strftime('%Y%m%d')
+                date_str = self.start_date.strftime('%Y%m%d')
                 url = self.base_url.format(self.current_page, date_str)
                 yield scrapy.Request(url=url, callback=self.parse, headers=headers)
             return
@@ -793,7 +794,7 @@ class DaumBondsfuturesSpider(scrapy.Spider):
 
         # 다음 페이지로 넘어감
         self.current_page += 1
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         next_url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=next_url, callback=self.parse, headers=headers)
 
@@ -835,7 +836,7 @@ class DaumFxSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumBondsfuturesSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/fx?page={}&regDate={}'
-        self.current_date = date(2023, 8, 13)
+        self.start_date = date(2023, 8, 13)
         self.end_date = date.today()
         self.current_page = 1
         self.previous_page_content = None
@@ -843,7 +844,7 @@ class DaumFxSpider(scrapy.Spider):
 
     def start_requests(self):
         #크롤링 시작 url 생성
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=url, callback=self.parse, headers=headers)
         
@@ -851,11 +852,11 @@ class DaumFxSpider(scrapy.Spider):
         current_page_content = ''.join(response.css('.box_etc > ul > li > div > strong > a::text').getall())
         # 현재 페이지의 내용과 이전 페이지의 내용이 같으면, 해당 일자 크롤링 종료
         if current_page_content == self.previous_page_content:
-            self.current_date += timedelta(days=1)
+            self.start_date -= timedelta(days=1)
             # 다음 날짜가 종료 날짜 이전일 경우 다시 parse 함수 실행
-            if self.current_date <= self.end_date:
+            if self.start_date >= self.end_date:
                 self.current_page = 1
-                date_str = self.current_date.strftime('%Y%m%d')
+                date_str = self.start_date.strftime('%Y%m%d')
                 url = self.base_url.format(self.current_page, date_str)
                 yield scrapy.Request(url=url, callback=self.parse, headers=headers)
             return
@@ -875,7 +876,7 @@ class DaumFxSpider(scrapy.Spider):
 
         # 다음 페이지로 넘어감
         self.current_page += 1
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         next_url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=next_url, callback=self.parse, headers=headers)
 
@@ -917,15 +918,15 @@ class DaumStockothersSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumOthersSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/others?page={}&regDate={}'
-        self.current_date = date(2023, 8, 13)
-        self.end_date = date.today()
+        self.start_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
 
     def start_requests(self):
         #크롤링 시작 url 생성
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=url, callback=self.parse, headers=headers)
         
@@ -933,11 +934,11 @@ class DaumStockothersSpider(scrapy.Spider):
         current_page_content = ''.join(response.css('.box_etc > ul > li > div > strong > a::text').getall())
         # 현재 페이지의 내용과 이전 페이지의 내용이 같으면, 해당 일자 크롤링 종료
         if current_page_content == self.previous_page_content:
-            self.current_date += timedelta(days=1)
+            self.start_date -= timedelta(days=1)
             # 다음 날짜가 종료 날짜 이전일 경우 다시 parse 함수 실행
-            if self.current_date <= self.end_date:
+            if self.start_date >= self.end_date:
                 self.current_page = 1
-                date_str = self.current_date.strftime('%Y%m%d')
+                date_str = self.start_date.strftime('%Y%m%d')
                 url = self.base_url.format(self.current_page, date_str)
                 yield scrapy.Request(url=url, callback=self.parse, headers=headers)
             return
@@ -957,7 +958,7 @@ class DaumStockothersSpider(scrapy.Spider):
 
         # 다음 페이지로 넘어감
         self.current_page += 1
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         next_url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=next_url, callback=self.parse, headers=headers)
 
@@ -999,15 +1000,15 @@ class DaumEstateSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumEstateSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/estate?page={}&regDate={}'
-        self.current_date = date(2023, 8, 13)
-        self.end_date = date.today()
+        self.start_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
 
     def start_requests(self):
         #크롤링 시작 url 생성
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=url, callback=self.parse, headers=headers)
         
@@ -1015,11 +1016,11 @@ class DaumEstateSpider(scrapy.Spider):
         current_page_content = ''.join(response.css('.box_etc > ul > li > div > strong > a::text').getall())
         # 현재 페이지의 내용과 이전 페이지의 내용이 같으면, 해당 일자 크롤링 종료
         if current_page_content == self.previous_page_content:
-            self.current_date += timedelta(days=1)
+            self.start_date -= timedelta(days=1)
             # 다음 날짜가 종료 날짜 이전일 경우 다시 parse 함수 실행
-            if self.current_date <= self.end_date:
+            if self.start_date >= self.end_date:
                 self.current_page = 1
-                date_str = self.current_date.strftime('%Y%m%d')
+                date_str = self.start_date.strftime('%Y%m%d')
                 url = self.base_url.format(self.current_page, date_str)
                 yield scrapy.Request(url=url, callback=self.parse, headers=headers)
             return
@@ -1039,7 +1040,7 @@ class DaumEstateSpider(scrapy.Spider):
 
         # 다음 페이지로 넘어감
         self.current_page += 1
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         next_url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=next_url, callback=self.parse, headers=headers)
 
@@ -1081,15 +1082,15 @@ class DaumConsumerSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumConsumerSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/consumer?page={}&regDate={}'
-        self.current_date = date(2023, 8, 13)
-        self.end_date = date.today()
+        self.start_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
 
     def start_requests(self):
         #크롤링 시작 url 생성
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=url, callback=self.parse, headers=headers)
         
@@ -1097,11 +1098,11 @@ class DaumConsumerSpider(scrapy.Spider):
         current_page_content = ''.join(response.css('.box_etc > ul > li > div > strong > a::text').getall())
         # 현재 페이지의 내용과 이전 페이지의 내용이 같으면, 해당 일자 크롤링 종료
         if current_page_content == self.previous_page_content:
-            self.current_date += timedelta(days=1)
+            self.start_date -= timedelta(days=1)
             # 다음 날짜가 종료 날짜 이전일 경우 다시 parse 함수 실행
-            if self.current_date <= self.end_date:
+            if self.start_date >= self.end_date:
                 self.current_page = 1
-                date_str = self.current_date.strftime('%Y%m%d')
+                date_str = self.start_date.strftime('%Y%m%d')
                 url = self.base_url.format(self.current_page, date_str)
                 yield scrapy.Request(url=url, callback=self.parse, headers=headers)
             return
@@ -1121,7 +1122,7 @@ class DaumConsumerSpider(scrapy.Spider):
 
         # 다음 페이지로 넘어감
         self.current_page += 1
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         next_url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=next_url, callback=self.parse, headers=headers)
 
@@ -1162,15 +1163,15 @@ class DaumWorldSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumWorldSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/world?page={}&regDate={}'
-        self.current_date = date(2023, 8, 13)
-        self.end_date = date.today()
+        self.start_date = date(2023, 8, 13)
+        self.end_date = self.start_date-pd.DateOffset(year=1)
         self.current_page = 1
         self.previous_page_content = None
 
 
     def start_requests(self):
         #크롤링 시작 url 생성
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=url, callback=self.parse, headers=headers)
         
@@ -1178,11 +1179,11 @@ class DaumWorldSpider(scrapy.Spider):
         current_page_content = ''.join(response.css('.box_etc > ul > li > div > strong > a::text').getall())
         # 현재 페이지의 내용과 이전 페이지의 내용이 같으면, 해당 일자 크롤링 종료
         if current_page_content == self.previous_page_content:
-            self.current_date += timedelta(days=1)
+            self.start_date -= timedelta(days=1)
             # 다음 날짜가 종료 날짜 이전일 경우 다시 parse 함수 실행
-            if self.current_date <= self.end_date:
+            if self.start_date >= self.end_date:
                 self.current_page = 1
-                date_str = self.current_date.strftime('%Y%m%d')
+                date_str = self.start_date.strftime('%Y%m%d')
                 url = self.base_url.format(self.current_page, date_str)
                 yield scrapy.Request(url=url, callback=self.parse, headers=headers)
             return
@@ -1202,7 +1203,7 @@ class DaumWorldSpider(scrapy.Spider):
 
         # 다음 페이지로 넘어감
         self.current_page += 1
-        date_str = self.current_date.strftime('%Y%m%d')
+        date_str = self.start_date.strftime('%Y%m%d')
         next_url = self.base_url.format(self.current_page, date_str)
         yield scrapy.Request(url=next_url, callback=self.parse, headers=headers)
 
