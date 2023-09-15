@@ -4,7 +4,7 @@ from user_agent import generate_user_agent
 import requests
 import json
 import pandas as pd
-
+from dateutil.relativedelta import relativedelta
 
 headers = {'User-Agent': generate_user_agent(os='win', device_type='desktop')}
 
@@ -17,7 +17,7 @@ class DaumFinanceSpider(scrapy.Spider):
         super(DaumFinanceSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/finance?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -66,7 +66,7 @@ class DaumFinanceSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -99,7 +99,7 @@ class DaumIndustrySpider(scrapy.Spider):
         super(DaumIndustrySpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/industry?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -148,7 +148,7 @@ class DaumIndustrySpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -181,7 +181,7 @@ class DaumOthersSpider(scrapy.Spider):
         super(DaumOthersSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/others?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -230,7 +230,7 @@ class DaumOthersSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -263,7 +263,7 @@ class DaumEmploySpider(scrapy.Spider):
         super(DaumEmploySpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/employ?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -312,7 +312,7 @@ class DaumEmploySpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -345,7 +345,7 @@ class DaumAutosSpider(scrapy.Spider):
         super(DaumAutosSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/autos?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -394,7 +394,7 @@ class DaumAutosSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -427,7 +427,7 @@ class DaumStockSpider(scrapy.Spider):
         super(DaumStockSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -476,7 +476,7 @@ class DaumStockSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -509,7 +509,7 @@ class DaumMarketSpider(scrapy.Spider):
         super(DaumMarketSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/market?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -558,7 +558,7 @@ class DaumMarketSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -591,7 +591,7 @@ class DaumPublicnoticeSpider(scrapy.Spider):
         super(DaumPublicnoticeSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/publicnotice?page={}&regDate={}'
         self.start_date = date(2023, 9, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -640,7 +640,7 @@ class DaumPublicnoticeSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -672,8 +672,8 @@ class DaumStockworldSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumStockworldSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/world?page={}&regDate={}'
-        self.start_date = date(2023, 8, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.start_date = date(2023, 9, 13)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -722,7 +722,7 @@ class DaumStockworldSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -754,8 +754,8 @@ class DaumBondsfuturesSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumBondsfuturesSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/bondsfutures?page={}&regDate={}'
-        self.start_date = date(2023, 8, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.start_date = date(2023, 9, 13)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -804,7 +804,7 @@ class DaumBondsfuturesSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -836,8 +836,8 @@ class DaumFxSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumBondsfuturesSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/fx?page={}&regDate={}'
-        self.start_date = date(2023, 8, 13)
-        self.end_date = date.today()
+        self.start_date = date(2023, 9, 13)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -886,7 +886,7 @@ class DaumFxSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -918,8 +918,8 @@ class DaumStockothersSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumOthersSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/stock/others?page={}&regDate={}'
-        self.start_date = date(2023, 8, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.start_date = date(2023, 9, 13)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -968,7 +968,7 @@ class DaumStockothersSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -1000,8 +1000,8 @@ class DaumEstateSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumEstateSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/estate?page={}&regDate={}'
-        self.start_date = date(2023, 8, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.start_date = date(2023, 9, 13)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -1050,7 +1050,7 @@ class DaumEstateSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -1082,8 +1082,8 @@ class DaumConsumerSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumConsumerSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/consumer?page={}&regDate={}'
-        self.start_date = date(2023, 8, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.start_date = date(2023, 9, 13)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -1132,7 +1132,7 @@ class DaumConsumerSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
@@ -1163,8 +1163,8 @@ class DaumWorldSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super(DaumWorldSpider, self).__init__(*args, **kwargs)
         self.base_url = 'https://news.daum.net/breakingnews/economic/world?page={}&regDate={}'
-        self.start_date = date(2023, 8, 13)
-        self.end_date = self.start_date-pd.DateOffset(year=1)
+        self.start_date = date(2023, 9, 13)
+        self.end_date = self.start_date-relativedelta(years=1)
         self.current_page = 1
         self.previous_page_content = None
 
@@ -1213,7 +1213,7 @@ class DaumWorldSpider(scrapy.Spider):
         article_id=current_url.split("/")[-1]
         s_header = {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                     "referer": current_url,
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwidXNlcl92aWV3Ijp7ImlkIjo4NDQ5Mjc0NiwiaWNvbiI6Imh0dHBzOi8vdDEuZGF1bWNkbi5uZXQvcHJvZmlsZS84WWJFVEhhcEpHYzAiLCJwcm92aWRlcklkIjoiREFVTSIsImRpc3BsYXlOYW1lIjoi67CV7IiY7KCVIn0sImdyYW50X3R5cGUiOiJhbGV4X2NyZWRlbnRpYWxzIiwic2NvcGUiOltdLCJleHAiOjE2OTQ3MTU4NTIsImF1dGhvcml0aWVzIjpbIlJPTEVfSU5URUdSQVRFRCIsIlJPTEVfREFVTSIsIlJPTEVfSURFTlRJRklFRCIsIlJPTEVfVVNFUiJdLCJqdGkiOiIwOTM2ZTRjZC1kNTczLTQzMzItYTkwZi0xYmRjMTk2NWViY2QiLCJmb3J1bV9pZCI6LTk5LCJjbGllbnRfaWQiOiIyNkJYQXZLbnk1V0Y1WjA5bHI1azc3WTgifQ.prTC8lYD7WMdr_Qglv7DimBEy3kfYYph6Twoy16ZmTI"
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3J1bV9rZXkiOiJuZXdzIiwiZ3JhbnRfdHlwZSI6ImFsZXhfY3JlZGVudGlhbHMiLCJzY29wZSI6W10sImV4cCI6MTY5NDc3NTg1NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9DTElFTlQiXSwianRpIjoiZjlhYjEzZDEtNTMwNy00ZTU0LThkZWEtNjg0ZTgxMWUzNTkyIiwiZm9ydW1faWQiOi05OSwiY2xpZW50X2lkIjoiMjZCWEF2S255NVdGNVowOWxyNWs3N1k4In0.1mexrsVCIBXd1j6S06jWdVNT8xoz6jWz3D4u4ZWI0to"
                     }
         res=requests.get(url="https://action.daum.net/apis/v1/reactions/home?itemKey={}".format(article_id), headers=s_header)
         sticker={key: value for key, value in json.loads(res.text)["item"]["stats"].items() if key in ["LIKE","SAD", "ANGRY", "RECOMMEND", "IMPRESS"]}
