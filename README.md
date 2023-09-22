@@ -1,7 +1,8 @@
 # 컨텐츠 기반 필터링(Doc2Vec)을 이용한 경제 뉴스 기사 추천 시스템 만들기
+---
 ## 1. Outline
 ![image](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/87634594/771161cf-d1b0-453c-9a39-df0b1058ea9f)
-
+---
 ## 2. Period & Process
 ![process](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/73fe9ed9-c3f3-4555-ae11-9d7f8118445e)
 
@@ -23,7 +24,7 @@
 - 소분류 : 금융, 증권, 산업/재계, 중기/벤처, 부동산, 글로벌 경제, 생활경제, 경제 일반
 - 수집내용 : 제목, 기자, 언론사, 본문, 작성일자, 수정일자, 스티커, url, 댓글(유저 id, 유저 닉네임, 작성일자, 좋아요 수, 싫어요 수)
 - 기사 457,817건,  댓글 1,928,758건
----
+
 
 #### Pre-processing
 
@@ -31,7 +32,7 @@
 - 제목(title) 또는 본문(content)이 결측치인 row 제거
 - 본문 글자 수가 50자 미만인 row 제거
 - 제목에 '부고'와 '단신'과 같은 경제와 직접적인 연관이 없는 키워드를 포함하는 row 제거
----
+
 #### Modelling - Using Gensim Library
 
 <img src="https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/1e053994-9d80-4028-ba7e-a7339f1b98d1" width="500" height="250"/>
@@ -40,7 +41,7 @@
 - Word2Vec, Doc2Vec 함수 포함
 - 뉴스 본문 tokenization (simple_preprocess)
 - TaggedDocument 생성 → Doc2Vec 모델 생성 및 학습
----
+
 #### Using Recommendation System
 
 - 기사 url 입력 → 본문과 유사한 뉴스 10개 추천
@@ -57,13 +58,18 @@
 - **ERD Cloud**
 ![ERD](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/2bda60b3-78fe-48cd-b884-e01fc8876c5f)
 
-#### Loading and Extract Data
-|  | INSERT 전  | INSERT 후 |
+#### Inserting and Selecting Data
+- **Table of Insert News**
+  
+|  | Before INSERT   | After INSERT  |
 | :---: | :---: | :---: |
 | **다음 경제 뉴스** | 347,759건 | 310,093건 |
 | **네이버 경제 뉴스** | 457,817건 | 397,639건 |
 | **네이버 뉴스 댓글** | 1,928,758건 | 1,928,758건 |
 
+- **Example of Selecting**
+![Select](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/3d5b20b6-a4b7-4ecf-8e88-2821cd60ecb4)
+---
 ## 3. Our Team
 - 김형석 : hyungsuk0815@gmail.com
 - 박수정 : psj0718s@gmail.com
