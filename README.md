@@ -1,12 +1,13 @@
-# News Recommendation Project
+# 컨텐츠 기반 필터링(Doc2Vec)을 이용한 경제 뉴스 기사 추천 시스템 만들기
 ## 1. Outline
-### 컨텐츠 기반 필터링(Doc2Vec)을 이용한 경제 뉴스 기사 추천 시스템 만들기
+![Outline](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/5260fe83-6b91-402d-84e1-ad40fbbee88e)
+
 ## 2. Period & Process
-### ![process](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/73fe9ed9-c3f3-4555-ae11-9d7f8118445e)
+![process](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/73fe9ed9-c3f3-4555-ae11-9d7f8118445e)
 
-## 1. Main Process
+### 1) Main Process
 
-### 1) 프로젝트 기획
+#### Project Plan
 
 
 **① [다음 경제 뉴스 기사](https://news.daum.net/breakingnews/economic)**
@@ -24,34 +25,36 @@
 - 기사 457,817건,  댓글 1,928,758건
 ---
 
-### 3) 데이터 전처리
+#### Pre-processing
 
 - 날짜 형식의 컬럼은 datetime 형식으로 변환, 네이버&다음 날짜 형식 통일
 - 제목(title) 또는 본문(content)이 결측치인 row 제거
 - 본문 글자 수가 50자 미만인 row 제거
 - 제목에 '부고'와 '단신'과 같은 경제와 직접적인 연관이 없는 키워드를 포함하는 row 제거
 ---
-### 4) 모델링 - Gensim 라이브러리 활용
+#### Modelling - Using Gensim Library
 
-![img.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/c1e40438-4583-4f70-9f0e-ba0acfd0f9d2/b4099725-f9a5-4842-8779-924680446dff/img.png)
+![gensim](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/1e053994-9d80-4028-ba7e-a7339f1b98d1)
 
 - 자연어를 벡터로 변환하는 데 필요한 편의 기능을 제공하는 라이브러리
 - Word2Vec, Doc2Vec 함수 포함
 - 뉴스 본문 tokenization (simple_preprocess)
 - TaggedDocument 생성 → Doc2Vec 모델 생성 및 학습
 ---
-### 5) 추천 시스템 활용
+#### Using Recommendation System
 
 - 기사 url 입력 → 본문과 유사한 뉴스 10개 추천
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/c1e40438-4583-4f70-9f0e-ba0acfd0f9d2/d4d577d8-0ad0-4162-9da9-3c71f7db52ad/Untitled.png)
+![url](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/977f7471-2071-4250-9818-39aa2fffd379)
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/c1e40438-4583-4f70-9f0e-ba0acfd0f9d2/4736358f-c22f-4ede-8c23-be3811eadd9a/Untitled.png)
+
+![recommend](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/a95e99f1-a4a5-4f53-8cb6-393e478b6ec1)
 
 ---
-## 2. Sub Process
+### 2) Sub Process
 
-### 1) DB 구축
-- **ERD Cloud 작성**
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/c1e40438-4583-4f70-9f0e-ba0acfd0f9d2/716f47ce-6fc5-4e0e-b820-1e10fe89f1de/image.png)
+#### Building DB
+- **ERD Cloud**
+![ERD](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/2bda60b3-78fe-48cd-b884-e01fc8876c5f)
+
 
