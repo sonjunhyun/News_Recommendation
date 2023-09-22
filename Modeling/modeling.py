@@ -21,7 +21,7 @@ def modeling(data, column_name='content'):
     tokenized_docs = [simple_preprocess(doc) for doc in docs]
 
     # TaggedDocument 객체 생성
-    tagged_docs = [TaggedDocument(doc, [i]) for i, doc in enumerate(tokenized_docs)]
+    tagged_docs = [TaggedDocument(doc, [i]) for i, doc in zip(data['url'], tokenized_docs)]
 
     # Doc2Vec 모델 생성
     model = Doc2Vec(vector_size=300, min_count=2, epochs=40, workers=8)
@@ -29,12 +29,12 @@ def modeling(data, column_name='content'):
     # 모델 학습
     model.build_vocab(tagged_docs)
     model.train(tagged_docs, total_examples=model.corpus_count, epochs=model.epochs)
-    model.save('naver.doc2vec')
+    model.save('./test.doc2vec')
     return model
 
 
 # doc2vec으로 추출된 파일 로드하기
-def load_doc2vec(file_name='naver.doc2vec'):
+def load_doc2vec(file_name='url_naver.doc2vec'):
     model = Doc2Vec.load(f'./{file_name}')
     return model
 
@@ -45,11 +45,10 @@ def show_similar_results(data, model, url, column_list=['title', 'date_upload', 
     기사 url을 이용해서
     유사한 기사 10개 추천받기
     """
-    news_idx = data[data['url'] == url].index.values.astype(int)[0]
-    similar_docs = model.dv.most_similar(news_idx)
+    similar_docs = model.dv.most_similar(url) 
     result = pd.DataFrame()
-    for idx, val in similar_docs:
-        temp = data.iloc[[idx]].copy()
+    for info, val in similar_docs:
+        temp = data[data['url'] == info].copy()
         temp.loc[:, 'cos_simil'] = val
         result = pd.concat([result, temp], axis=0)
     return result.loc[:, column_list]
