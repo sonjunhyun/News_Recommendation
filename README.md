@@ -64,17 +64,17 @@
 | **네이버 경제 뉴스** | 457,817건 | 397,639건 |
 | **네이버 뉴스 댓글** | 1,928,758건 | 1,928,758건 |
 
-## 3. 팀 소개
-김형석 : hyungsuk0815@gmail.com
-박수정 : psj0718s@gmail.com
-손준현 : leonica0429@gmail.com
-차민경 : chchloe2020@gmail.com
-팀 notion: [News_Rec_TEAM_4](https://www.notion.so/7d86f33728ae41368121c4b681611519)
+## 3. Our Team
+- 김형석 : hyungsuk0815@gmail.com
+- 박수정 : psj0718s@gmail.com
+- 손준현 : leonica0429@gmail.com
+- 차민경 : chchloe2020@gmail.com
+- 팀 notion: [News_Rec_TEAM_4](https://www.notion.so/7d86f33728ae41368121c4b681611519)
 ---
-## 4. 참고자료
-[인공지능 기반 추천 시스템 AiRS를 소개합니다.](https://blog.naver.com/naver_diary/220936643956)
-[네이버 뉴스 댓글 크롤링 및 여론 조사 (22.09.13.최신)](https://ukjong.tistory.com/181)
-[[파이썬] Gensim Doc2Vec 모델 생성 및 학습](https://colinch4.github.io/2023-09-06/15-42-26-331788/)
+## 4. Reference
+- [인공지능 기반 추천 시스템 AiRS를 소개합니다.](https://blog.naver.com/naver_diary/220936643956)
+- [네이버 뉴스 댓글 크롤링 및 여론 조사 (22.09.13.최신)](https://ukjong.tistory.com/181)
+- [[파이썬] Gensim Doc2Vec 모델 생성 및 학습](https://colinch4.github.io/2023-09-06/15-42-26-331788/)
 ---
 ## 5. Stacks
 <div align='left'>
