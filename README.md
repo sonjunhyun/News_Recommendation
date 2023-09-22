@@ -1,6 +1,6 @@
 # 컨텐츠 기반 필터링(Doc2Vec)을 이용한 경제 뉴스 기사 추천 시스템 만들기
 ## 1. Outline
-![Outline](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/5260fe83-6b91-402d-84e1-ad40fbbee88e)
+![image](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/87634594/771161cf-d1b0-453c-9a39-df0b1058ea9f)
 
 ## 2. Period & Process
 ![process](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/73fe9ed9-c3f3-4555-ae11-9d7f8118445e)
@@ -34,7 +34,7 @@
 ---
 #### Modelling - Using Gensim Library
 
-![gensim](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/1e053994-9d80-4028-ba7e-a7339f1b98d1)
+<img src="https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/1e053994-9d80-4028-ba7e-a7339f1b98d1" width="500" height="250"/>
 
 - 자연어를 벡터로 변환하는 데 필요한 편의 기능을 제공하는 라이브러리
 - Word2Vec, Doc2Vec 함수 포함
