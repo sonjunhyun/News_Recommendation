@@ -57,4 +57,37 @@
 - **ERD Cloud**
 ![ERD](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/76051357/2bda60b3-78fe-48cd-b884-e01fc8876c5f)
 
+#### Loading and Extract Data
+|  | INSERT 전  | INSERT 후 |
+| :---: | :---: | :---: |
+| **다음 경제 뉴스** | 347,759건 | 310,093건 |
+| **네이버 경제 뉴스** | 457,817건 | 397,639건 |
+| **네이버 뉴스 댓글** | 1,928,758건 | 1,928,758건 |
 
+## 3. 팀 소개
+김형석 : hyungsuk0815@gmail.com
+박수정 : psj0718s@gmail.com
+손준현 : leonica0429@gmail.com
+차민경 : chchloe2020@gmail.com
+팀 notion: [News_Rec_TEAM_4](https://www.notion.so/7d86f33728ae41368121c4b681611519)
+---
+## 4. 참고자료
+[인공지능 기반 추천 시스템 AiRS를 소개합니다.](https://blog.naver.com/naver_diary/220936643956)
+[네이버 뉴스 댓글 크롤링 및 여론 조사 (22.09.13.최신)](https://ukjong.tistory.com/181)
+[[파이썬] Gensim Doc2Vec 모델 생성 및 학습](https://colinch4.github.io/2023-09-06/15-42-26-331788/)
+---
+## 5. Stacks
+<div align='left'>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white">
+  <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white">
+  <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Google Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white"/>
+  <br>
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white">
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
+  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+  <img src="https://img.shields.io/badge/Google Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white">
+  <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
+</div>
