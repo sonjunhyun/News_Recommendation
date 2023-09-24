@@ -1,6 +1,6 @@
 ### 컨텐츠 기반 필터링(Doc2Vec)을 이용한 
 # 📰 경제 뉴스 기사 추천 시스템
-<br/><br/><br/>
+<br/><br/>
 ## 1. Outline
 ![image](https://github.com/sesac-2023/FINANCIAL_NEWS_TEAM_4/assets/87634594/771161cf-d1b0-453c-9a39-df0b1058ea9f)
 
